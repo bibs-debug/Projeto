@@ -1,4 +1,4 @@
-package project;
+package projeto;
 
 import project.BinaryNode;
 
@@ -43,6 +43,92 @@ public class BinaryTree<T> {
         return root.getHeight();
     }
 
+    public BinaryNode<T> search(BinaryNode<T> node, T data) {
+        if (node == null) {
+            return null;
+        }
+
+        if (data.compareTo(node.getValue()) == 0) {
+            return node; // Nó encontrado
+        } else if (data.compareTo(node.getValue()) < 0) {
+            return search(node.getLeftNode(), data);
+        } else {
+            return search(node.getRightNode(), data);
+        }
+    }
+    // Método de inserção (insert)
+    public BinaryNode<T> insert(BinaryNode<T> node, T data) {
+        if (node == null) {
+            node = new BinaryNode<>(data);
+            return node;
+        }
+
+        if (data.compareTo(node.getValue()) < 0) {
+            node.setLeftNode(insert(node.getLeftNode(), data));
+        } else if (data.compareTo(node.getValue()) > 0) {
+            node.setRightNode(insert(node.getRightNode(), data));
+        } else {
+            throw new RuntimeException("Valor já existe na árvore: " + data);
+        }
+
+        return node;
+    }
+
+    
+    // Método de remoção (remove)
+    public BinaryNode<T> remove(BinaryNode<T> node, T value) {
+        if (isEmpty()) {
+            throw new RuntimeException("Árvore vazia");
+        }
+        
+        remove(BinaryNode<T> node, T value) {
+            if (node == null) {
+                throw new RuntimeException("Valor não encontrado na árvore: " + value);
+            }
+        
+            if (value.compareTo(node.getValue()) == 0) {
+                // Caso 1: O nó a ser removido não tem filhos (nó folha)
+                if (node.getLeftNode() == null && node.getRightNode() == null) {
+                    return null;
+                }
+            }
+                // Caso 2: O nó a ser removido tem apenas o filho à direita
+            else if (node.getLeftNode() == null) {
+                return node.getRightNode();
+            }
+            
+            // Caso 3: O nó a ser removido tem apenas o filho à esquerda
+            else if (node.getRightNode() == null) {
+                return node.getLeftNode();
+            }
+            
+        // Caso 4: O nó a ser removido tem dois filhos
+        else {
+            BinaryNode<T> rightSubtree = node.getRightNode();  // Subárvore direita
+            BinaryNode<T> successor = node.getRightNode();      // Sucessor (menor valor da subárvore direita)
+            
+            // Encontrar o menor valor na subárvore direita (sucessor)
+            while (successor.getLeftNode() != null) {
+                successor = successor.getLeftNode();
+            }
+            
+            // O sucessor assume o lugar do nó removido
+            successor.setLeftNode(node.getLeftNode()); // Conecta o filho esquerdo do nó removido
+            return rightSubtree; // Retorna o novo nó após a remoção
+        }
+    } 
+        // Recurre para o filho direito se o valor for maior
+        else if (value.compareTo(node.getValue()) > 0) {
+            node.setRightNode(remove(node.getRightNode(), value));
+        } 
+        // Recurre para o filho esquerdo se o valor for menor
+        else {
+            node.setLeftNode(remove(node.getLeftNode(), value));
+        }
+        
+        return node;
+    }
+
     // inOrderTraversal()
     // Percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right).
     public void inOrderTraversal() {
@@ -85,5 +171,3 @@ public class BinaryTree<T> {
         }
     }
 }
-    
-
