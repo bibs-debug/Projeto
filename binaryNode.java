@@ -86,8 +86,11 @@ public class BinaryNode<T> {
         }
         return 1 + Math.max(
             getLeftNode() == null ? 0 : getLeftNode().getHeight(),
-            getRightNode() == null ? 0 : getRightNode().getHeight());
+            getRightNode() == null ? 0 : getRightNode().getHeight()
+        );
+    }
+
+    public float visit() {
+        return Float.NaN;
     }
 }
-
-
