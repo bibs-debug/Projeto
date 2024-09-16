@@ -60,8 +60,8 @@ public class BST<T> extends BinaryTree<T> {
 	//	findSuccessor(data)
 	//	Retorna o nó sucessor do nó que contém a chave indicada em data OU null caso não exista o nó com chave data na BST.
 
-	//	clear()
-	//	Remove todos os nós da BST e suas conexões (referências para outros nós se tornam null).
-
+	 public void clear() {
+        root = null; // Remove a referência ao nó raiz e, portanto, toda a árvore.
+    }
 }
 
