@@ -1,18 +1,49 @@
+package projeto;
+
 public class BST<T> extends BinaryTree<T> {
 
-	public BST() { super();	}
-	public BST(BinaryNode<T> root) { super(root); }
+	public BST() {
+		 super();	
+	}
+	public BST(BinaryNode<T> root) { 
+		super(root);
+
+	}
 
 	//	search(data)
-	
-	//	Busca o nó com a chave data na BST, sendo que os nós continuam contendo apenas um tipo genérico T na parte de dados.
-	//	Caso o nó pertença à BST, retorna o nó encontrado. Caso contrário, retorna null.
+	public BinaryNode<T> search(BinaryNode<T> node,T data){
+		
+		if (node == null) {
+			return null;
+		}
+		
+		if (data.compareTo(node.getData()) == 0) {
+			return node; // Nó encontrado
+		} else if (data.compareTo(node.getData()) < 0) {
+			return search(node.getLeft(), data); 
+		} else { // result > 0
+			return search(node.getRight(), data); 
+		}
+    }
 
-	//	insert(data)
-	//	Insere um novo nó na BST, sendo que data é um valor usado como chave do nó (tipo genérico T).
-	//	Caso já exista um nó da BST com a mesma chave, a BST não é alterada.
-	//	Opcional: O método pode lançar uma exceção (ex. throw new RuntimeException()) para indicar que já existe um nó com a chave indicada.
+		public BinaryNode<T> insert(BinaryNode<T> node, T data){
+			
+			if (node == null) {
+				node = new 	BinaryNode<>(data);
+				return node;
+			}
 
+			if (data.compareTo(node.getValue()) < 0) {
+				node.setLeftNode(insert(node.getLeftNode(), data));
+			} else if (data.compareTo(node.getValue()) > 0) {
+				node.setRightNode(insert(node.getRightNode(), data));
+			} else {
+				// Se o valor já existe na árvore, lança uma exceção
+				throw new RuntimeException("valor já existe na árvore: " + data);
+			}
+			
+			return node;
+	}
 	//	remove(data)
 	//	Remove o nó com a chave data da BST, caso o nó pertença à BST.
 	//	Opcional: O método pode lançar uma exceção (ex. throw new RuntimeException()) para indicar que a BST não possui um nó com a chave indicada.
