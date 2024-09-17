@@ -145,6 +145,7 @@ public class BinaryTree<T> {
             System.out.print(node.getValue() + "  ");
             inOrderTraversal(node.getRightNode());
         }
+
     }
 
     // preOrderTraversal()
