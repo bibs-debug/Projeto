@@ -1,56 +1,60 @@
+//Beatriz Lima de Moura RA: 10416616
+//Beatriz Santos de Souza RA: 10417803
+//Jessica Bispo RA: 10410798
+
 package project;
 
-public class BinaryNode {
+public class BinaryNode<T> {
     // nodes esquerda e direita
-    private BinaryNode rightNode;
-    private BinaryNode leftNode;
+    private BinaryNode<T> rightNode;
+    private BinaryNode<T> leftNode;
     // node pai
-    private BinaryNode parent;
+    private BinaryNode<T> parent;
     // valor do node
-    private String value;
+    private T value;
 
     // Construtor com valor
-    public BinaryNode(String value) {
-        setValue(value); 
-    }
-
-    // Construtor com valor e nó pai
-    public BinaryNode(String value, BinaryNode parent) {
-        setValue(value);
-        setParent(parent);
-        setRightNode(null);
-        setLeftNode(null);
-    }
-
-    public void setRightNode(BinaryNode rightNode) {
-        this.rightNode = rightNode;
-    }
-
-    public BinaryNode getRightNode() {
-        return rightNode;
-    }
-
-    public void setLeftNode(BinaryNode leftNode) {
-        this.leftNode = leftNode;
-    }
-
-    public BinaryNode getLeftNode() {
-        return leftNode;
-    }
-
-    public void setParent(BinaryNode parent) {
-        this.parent = parent;
-    }
-
-    public BinaryNode getParent() {
-        return parent;
-    }
-
-    public void setValue(String value) {
+    public BinaryNode(T value) {
         this.value = value;
     }
 
-    public String getValue() {
+    // Construtor com valor e nó pai
+    public BinaryNode(T value, BinaryNode<T> parent) {
+        this.value = value;
+        this.parent = parent;
+        this.rightNode = null;
+        this.leftNode = null;
+    }
+
+    public void setRightNode(BinaryNode<T> rightNode) {
+        this.rightNode = rightNode;
+    }
+
+    public BinaryNode<T> getRightNode() {
+        return rightNode;
+    }
+
+    public void setLeftNode(BinaryNode<T> leftNode) {
+        this.leftNode = leftNode;
+    }
+
+    public BinaryNode<T> getLeftNode() {
+        return leftNode;
+    }
+
+    public void setParent(BinaryNode<T> parent) {
+        this.parent = parent;
+    }
+
+    public BinaryNode<T> getParent() {
+        return parent;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
         return value;
     }
 
@@ -72,21 +76,25 @@ public class BinaryNode {
         }
         return degree;
     }
+
     public int getLevel() {
-		if (isRoot() == true){
+        if (isRoot()) {
             return 0;
         }
-		
-		return 1 + parent.getLevel();
-	}
+        return 1 + parent.getLevel();
+    }
 
     public int getHeight() {
-		if (isLeaf() == true){
+        if (isLeaf()) {
             return 0;
         }
-		
-		return 1 + Math.max(left == null ? 0 : left.getHeight(), //verifica se o filho esquerdo é nulo. Se for, considera a altura dele como 0. Se não for nulo, chama recursivamente o método getHeight() no filho esquerdo.
-							right == null ? 0 : right.getHeight()); //Faz o mesmo para o filho direito. Se o filho direito for nulo, considera a altura dele como 0, senão calcula a altura recursivamente.
-	}
-}
+        return 1 + Math.max(
+            getLeftNode() == null ? 0 : getLeftNode().getHeight(),
+            getRightNode() == null ? 0 : getRightNode().getHeight()
+        );
+    }
 
+    public float visit() {
+        return Float.NaN;
+    }
+}
