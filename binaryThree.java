@@ -4,7 +4,7 @@
 
 import java.util.Stack;
 
-public class BinaryTreeOP {
+public class BinaryTree {
 
 	private BinaryNode root;
 	
