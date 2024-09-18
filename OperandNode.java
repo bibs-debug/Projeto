@@ -1,16 +1,15 @@
 //Beatriz Lima de Moura RA: 10416616
 //Beatriz Santos de Souza RA: 10417803
 //Jessica Bispo RA: 10410798
+public class OperarandNode extends BinaryNode {
 
-package project;
-
-public class OperandNode extends BinaryNode<Float> {
-    public OperandNode(Float value) {
-        super(value);
+    public OperarandNode(Float value, BinaryNode parent) {
+        super(value, parent);
     }
-    // Sobrescreve o método visitar para retornar o valor do operando
+
     @Override
     public float visit() {
-        return getValue();
+        return (float) getValue();
     }
 }
+
