@@ -2,81 +2,59 @@
 //Beatriz Santos de Souza RA: 10417803
 //Jessica Bispo RA: 10410798
 
-package project;
+public class BinaryNode {
 
-public class BinaryNode<T> {
-    // nodes esquerda e direita
-    private BinaryNode<T> rightNode;
-    private BinaryNode<T> leftNode;
-    // node pai
-    private BinaryNode<T> parent;
-    // valor do node
-    private T value;
+    private BinaryNode rightNode;
+    private BinaryNode leftNode;
+    private BinaryNode parent;
+    private Object value;
 
-    // Construtor com valor
-    public BinaryNode(T value) {
+    public BinaryNode(Object value) {
         this.value = value;
     }
 
-    // Construtor com valor e nó pai
-    public BinaryNode(T value, BinaryNode<T> parent) {
+    public BinaryNode(Object value, BinaryNode parent) {
         this.value = value;
         this.parent = parent;
         this.rightNode = null;
         this.leftNode = null;
     }
 
-    public void setRightNode(BinaryNode<T> rightNode) {
+    public void setRightNode(BinaryNode rightNode) {
         this.rightNode = rightNode;
     }
+        
 
-    public BinaryNode<T> getRightNode() {
-        return rightNode;
-    }
-
-    public void setLeftNode(BinaryNode<T> leftNode) {
+    public void setLeftNode(BinaryNode leftNode) {
         this.leftNode = leftNode;
     }
 
-    public BinaryNode<T> getLeftNode() {
-        return leftNode;
-    }
-
-    public void setParent(BinaryNode<T> parent) {
+    
+    public void setParent(BinaryNode parent) {
         this.parent = parent;
     }
 
-    public BinaryNode<T> getParent() {
-        return parent;
-    }
-
-    public void setValue(T value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 
-    public T getValue() {
+    public BinaryNode getLeftNode() {
+        return leftNode;
+    }
+
+    public BinaryNode getRightNode() {
+        return rightNode;
+    }
+
+    public BinaryNode getParent() {
+        return parent;
+    }
+
+    public Object getValue() {
         return value;
     }
 
-    public boolean isRoot() {
-        return parent == null;
-    }
-
-    public boolean isLeaf() {
-        return getRightNode() == null && getLeftNode() == null;
-    }
-
-    public int degree() {
-        int degree = 0;
-        if (getRightNode() != null) {
-            degree++;
-        }
-        if (getLeftNode() != null) {
-            degree++;
-        }
-        return degree;
-    }
-
+    
     public int getLevel() {
         if (isRoot()) {
             return 0;
@@ -94,7 +72,26 @@ public class BinaryNode<T> {
         );
     }
 
+    public boolean isRoot() {
+        return parent == null;
+    }
+    
+    public boolean isLeaf() {
+        return getRightNode() == null && getLeftNode() == null;
+    }
+
+    public int degree() {
+        int degree = 0;
+        if (getLeftNode() != null) degree++;
+        if (getRightNode() != null) degree++;
+        return degree;
+    }
+
     public float visit() {
         return Float.NaN;
+    }
+
+    public void print() {
+        throw new UnsupportedOperationException("Unimplemented method 'print'");
     }
 }
