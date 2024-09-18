@@ -2,177 +2,142 @@
 //Beatriz Santos de Souza RA: 10417803
 //Jessica Bispo RA: 10410798
 
-package projeto;
+import java.util.Stack;
 
-import project.BinaryNode;
+public class BinaryTreeOP {
 
-public class BinaryTree<T> {
+	private BinaryNode root;
+	
+	public BinaryNode getRoot() { 
+		return root; 
+	}
 
-    private BinaryNode<T> root;
-
-    public BinaryNode<T> getRoot() {
-        return root;
-    }
-
-    public boolean isEmpty() {
-        return root == null;
-    }
-
-    public int getDegree() {
-        if (isEmpty()) {
-            return -1;
-        }
-        return getDegree(root);
-    }
-
-    private int getDegree(BinaryNode<T> root) {
-		if (root == null || root.isLeaf())
-			return 0;
-		
-		int degree = root.getDegree();
-		
-		int leftDegree = getDegree(root.getLeftNode());
-		int rightDegree = getDegree(root.getRightNode());
-		return Math.max(degree, Math.max(leftDegree, rightDegree));
+	public void setRoot(BinaryNode root) { 
+		this.root = root;
 	}
 	
+	public boolean isEmpty() {
+		return root == null;
+	}
+	
+	public int getDegree() {
+		if (isEmpty()) {
+			return -1;
+		}
+		
+		return getDegree(root);
+	}
 
-    // getHeight()
-    // Retorna a altura da árvore (int).
-    public int getHeight() {
-        if (isEmpty()) {
-            return -1;
-        }
+	
+	public int getHeight() {
+		if (isEmpty()) {
+			return -1;
+		}
+		
+		return root.getHeight();
+	}
+	
+	// inOrderTraversal()
+	// Percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right).
+	// Nesta implementação, percorrer a árvore significa visitar os nós
+	// da árvore e exibir o conteúdo de cada nó na saída padrão do sistema (ex. terminal/tela).
+	public void inOrderTraversal() {
+		inOrderTraversal(root);
+	}
+	
+	// preOrderTraversal()
+	// Percorre a árvore em pré-ordem (NLR).
+	public void preOrderTraversal() {
+		preOrderTraversal(root);
+	}
 
-        return root.getHeight();
-    }
+	// postOrderTraversal()
+	// Percorre a árvore em pós-ordem (LRN).
+	public void postOrderTraversal() {
+		postOrderTraversal(root);
+	}
 
-    public BinaryNode<T> search(BinaryNode<T> node, T data) {
-        if (node == null) {
-            return null;
-        }
+	public void insertExpression(String expression) {
+		String[] tokens = expression.replaceAll(" ", "").split(""); 
 
-        if (data.compareTo(node.getValue()) == 0) {
-            return node; // Nó encontrado
-        } else if (data.compareTo(node.getValue()) < 0) {
-            return search(node.getLeftNode(), data);
-        } else {
-            return search(node.getRightNode(), data);
-        }
-    }
-    // Método de inserção (insert)
-    public BinaryNode<T> insert(BinaryNode<T> node, T data) {
-        if (node == null) {
-            node = new BinaryNode<>(data);
-            return node;
-        }
+		//"abc" = ['a', 'b', 'c']
 
-        if (data.compareTo(node.getValue()) < 0) {
-            node.setLeftNode(insert(node.getLeftNode(), data));
-        } else if (data.compareTo(node.getValue()) > 0) {
-            node.setRightNode(insert(node.getRightNode(), data));
-        } else {
-            throw new RuntimeException("Valor já existe na árvore: " + data);
-        }
 
-        return node;
-    }
+		Stack<BinaryNode> stack = new Stack<>();
+		BinaryNode current = null;
+	
+		for (String token : tokens) {
+			if (token.equals("(")) {
 
-    
-    // Método de remoção (remove)
-    public BinaryNode<T> remove(BinaryNode<T> node, T value) {
-        if (isEmpty()) {
-            throw new RuntimeException("Árvore vazia");
-        }
-        
-        remove(BinaryNode<T> node, T value) {
-            if (node == null) {
-                throw new RuntimeException("Valor não encontrado na árvore: " + value);
-            }
-        
-            if (value.compareTo(node.getValue()) == 0) {
-                // Caso 1: O nó a ser removido não tem filhos (nó folha)
-                if (node.getLeftNode() == null && node.getRightNode() == null) {
-                    return null;
-                }
-            }
-                // Caso 2: O nó a ser removido tem apenas o filho à direita
-            else if (node.getLeftNode() == null) {
-                return node.getRightNode();
-            }
-            
-            // Caso 3: O nó a ser removido tem apenas o filho à esquerda
-            else if (node.getRightNode() == null) {
-                return node.getLeftNode();
-            }
-            
-        // Caso 4: O nó a ser removido tem dois filhos
-        else {
-            BinaryNode<T> rightSubtree = node.getRightNode();  // Subárvore direita
-            BinaryNode<T> successor = node.getRightNode();      // Sucessor (menor valor da subárvore direita)
-            
-            // Encontrar o menor valor na subárvore direita (sucessor)
-            while (successor.getLeftNode() != null) {
-                successor = successor.getLeftNode();
-            }
-            
-            // O sucessor assume o lugar do nó removido
-            successor.setLeftNode(node.getLeftNode()); // Conecta o filho esquerdo do nó removido
-            return rightSubtree; // Retorna o novo nó após a remoção
-        }
-    } 
-        // Recurre para o filho direito se o valor for maior
-        else if (value.compareTo(node.getValue()) > 0) {
-            node.setRightNode(remove(node.getRightNode(), value));
-        } 
-        // Recurre para o filho esquerdo se o valor for menor
-        else {
-            node.setLeftNode(remove(node.getLeftNode(), value));
-        }
-        
-        return node;
-    }
+			} else if (token.equals(")")) {
+				
+			} else if (isOperator(token)) {
+				
+			} else if (token.matches("[0-9]+")) {
+				
+			} else {
+				System.out.println("Token inválido: " + token);
+	
+			}
+		}
 
-    // inOrderTraversal()
-    // Percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right).
-    public void inOrderTraversal() {
-        inOrderTraversal(root);
-    }
+	}
+	
+	public void printTree() {
+		if (isEmpty()) {
+			System.out.println("Árvore vazia.");
+		} else {
+			printTree(root, 0);
+		}
+	}
 
-    private void inOrderTraversal(BinaryNode<T> node) {
-        if (node != null) {
-            inOrderTraversal(node.getLeftNode());
-            System.out.print(node.getValue() + "  ");
-            inOrderTraversal(node.getRightNode());
-        }
+	private boolean isOperator(String token) {
+		return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
+	}
 
-    }
+	private void printTree(BinaryNode node, int level) {
+		if (node != null) {
+			printTree(node.getRightNode(), level + 1);
+			for (int i = 0; i < level; i++) {
+				System.out.print("   ");
+			}
+			System.out.println(node.getValue());
+			printTree(node.getLeftNode(), level + 1);
+		}
+	}
+	
+	private int getDegree(BinaryNode node) {
+		if (node == null) {
+			return -1;
+		}
+		
+		int leftDegree = getDegree(node.getLeftNode());
+		int rightDegree = getDegree(node.getRightNode());
 
-    // preOrderTraversal()
-    // Percorre a árvore em pré-ordem (NLR).
-    public void preOrderTraversal() {
-        preOrderTraversal(root);
-    }
+		return 1 + Math.max(leftDegree, rightDegree);
+	}
 
-    private void preOrderTraversal(BinaryNode<T> node) {
-        if (node != null) {
-            System.out.print(node.getValue() + "  ");
-            preOrderTraversal(node.getLeftNode());
-            preOrderTraversal(node.getRightNode());
-        }
-    }
+	private void inOrderTraversal(BinaryNode root) {
+		if (root != null) {
+			inOrderTraversal(root.getLeftNode());
+			System.out.print(root.getValue() + "  ");
+			inOrderTraversal(root.getRightNode());
+		}
+	}
 
-    // postOrderTraversal()
-    // Percorre a árvore em pós-ordem (LRN).
-    public void postOrderTraversal() {
-        postOrderTraversal(root);
-    }
-
-    private void postOrderTraversal(BinaryNode<T> node) {
-        if (node != null) {
-            postOrderTraversal(node.getLeftNode());
-            postOrderTraversal(node.getRightNode());
-            System.out.print(node.getValue() + "  ");
-        }
-    }
+	private void preOrderTraversal(BinaryNode root) {
+		if (root != null) {
+			System.out.print(root.getValue() + "  ");
+			preOrderTraversal(root.getLeftNode());
+			preOrderTraversal(root.getRightNode());
+		}
+	}
+	
+	private void postOrderTraversal(BinaryNode root) {
+		if (root != null) {
+			postOrderTraversal(root.getLeftNode());
+			postOrderTraversal(root.getRightNode());
+			System.out.print(root.getValue() + "  ");
+		}
+	}
 }
