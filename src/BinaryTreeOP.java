@@ -1,10 +1,10 @@
-//Beatriz Lima de Moura RA: 10416616
-//Beatriz Santos de Souza RA: 10417803
-//Jessica Bispo RA: 10410798
+//Beatriz Lima de Moura     RA: 10416616
+//Beatriz Santos de Souza   RA: 10417803
+//Jessica Bispo             RA: 10410798
 
-import java.util.Stack;
+package src;
 
-public class BinaryTree {
+public class BinaryTreeOP {
 
 	private BinaryNode root;
 	
@@ -58,29 +58,10 @@ public class BinaryTree {
 	}
 
 	public void insertExpression(String expression) {
-		String[] tokens = expression.replaceAll(" ", "").split(""); 
 
-		//"abc" = ['a', 'b', 'c']
+	 	expression = new VeryBasicTokenizer(expression).tokenize();
 
-
-		Stack<BinaryNode> stack = new Stack<>();
-		BinaryNode current = null;
-	
-		for (String token : tokens) {
-			if (token.equals("(")) {
-
-			} else if (token.equals(")")) {
-				
-			} else if (isOperator(token)) {
-				
-			} else if (token.matches("[0-9]+")) {
-				
-			} else {
-				System.out.println("Token inválido: " + token);
-	
-			}
-		}
-
+		root = buildTree(expression.trim()); 
 	}
 	
 	public void printTree() {
@@ -91,15 +72,78 @@ public class BinaryTree {
 		}
 	}
 
-	private boolean isOperator(String token) {
-		return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
+	private BinaryNode buildTree(String expression) {
+		expression = expression.trim();
+	
+		if (isNumber(expression)) {
+			return new BinaryNode(expression);
+		}
+	
+		if (expression.startsWith("(") && expression.endsWith(")")) {
+			return buildTree(expression.substring(1, expression.length() - 1));
+		}
+	
+		int operatorIndex = findMainOperator(expression);
+	
+		BinaryNode root = new BinaryNode(Character.toString(expression.charAt(operatorIndex)));
+	
+		root.setLeftNode(buildTree(expression.substring(0, operatorIndex).trim()));
+		root.setRightNode(buildTree(expression.substring(operatorIndex + 1).trim()));
+	
+		return root;
+	}
+
+	private int findMainOperator(String expr) {
+		int minPrecedence = Integer.MAX_VALUE;
+		int operatorIndex = -1;
+		int parenthesesDepth = 0;
+	
+		for (int i = 0; i < expr.length(); i++) {
+			char c = expr.charAt(i);
+	
+			if (c == '(') {
+				parenthesesDepth++;
+			} else if (c == ')') {
+				parenthesesDepth--;
+			} else if ((c == '+' || c == '-' || c == '*' || c == '/') && parenthesesDepth == 0) {
+				int precedence = getPrecedence(c);
+				if (precedence <= minPrecedence) {
+					minPrecedence = precedence;
+					operatorIndex = i;
+				}
+			}
+		}
+	
+		return operatorIndex;
+	}
+
+	private int getPrecedence(char operator) {
+		switch (operator) {
+			case '+':
+			case '-':
+				return 1;
+			case '*':
+			case '/':
+				return 2;
+			default:
+				return Integer.MAX_VALUE;
+		}
+	}
+
+	private boolean isNumber(String s) {
+		try {
+			Float.parseFloat(s);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	private void printTree(BinaryNode node, int level) {
 		if (node != null) {
 			printTree(node.getRightNode(), level + 1);
 			for (int i = 0; i < level; i++) {
-				System.out.print("   ");
+				System.out.print("    ");
 			}
 			System.out.println(node.getValue());
 			printTree(node.getLeftNode(), level + 1);
