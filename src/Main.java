@@ -14,7 +14,7 @@ public class Main {
         tree.insertExpression(expression);
 
         
-        System.out.println(tree.getRoot().getClass().getName());
+        //System.out.println(tree.getRoot().getClass().getName());
 
         System.out.println(tree.calculateResult());
 
