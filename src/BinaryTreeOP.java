@@ -6,7 +6,7 @@ package src;
 
 public class BinaryTreeOP {
 
-	private BinaryNode root;
+	private BinaryNode root;  // raiz da árvore binária
 	
 	public BinaryNode getRoot() { 
 		return root; 
@@ -22,45 +22,46 @@ public class BinaryTreeOP {
 	
 	public int getDegree() {
 		if (isEmpty()) {
-			return -1;
+			return -1;  // se a árvore estiver vazia, retorna -1
 		}
 		
-		return getDegree(root);
+		return getDegree(root);  // calcula o grau a partir da raiz
 	}
 
-	
 	public int getHeight() {
 		if (isEmpty()) {
-			return -1;
+			return -1;  // se a árvore estiver vazia, retorna -1
 		}
 		
-		return root.getHeight();
+		return root.getHeight();  // obtém a altura da raiz
+	}
+
+	public Float calculateResult() {
+		return root.visit();
 	}
 	
-	// inOrderTraversal()
-	// Percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right).
-	// Nesta implementação, percorrer a árvore significa visitar os nós
-	// da árvore e exibir o conteúdo de cada nó na saída padrão do sistema (ex. terminal/tela).
+	// percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right)
 	public void inOrderTraversal() {
 		inOrderTraversal(root);
 	}
 	
-	// preOrderTraversal()
-	// Percorre a árvore em pré-ordem (NLR).
+	// percorre a árvore em pré-ordem (NLR)
 	public void preOrderTraversal() {
 		preOrderTraversal(root);
 	}
 
-	// postOrderTraversal()
-	// Percorre a árvore em pós-ordem (LRN).
+	// percorre a árvore em pós-ordem (LRN)
 	public void postOrderTraversal() {
 		postOrderTraversal(root);
 	}
 
+	// insere uma expressão na árvore
 	public void insertExpression(String expression) {
 
-	 	expression = new VeryBasicTokenizer(expression).tokenize();
+	 	// tokeniza a expressão
+		expression = new VeryBasicTokenizer(expression).tokenize();
 
+		// constrói a árvore com base na expressão tokenizada
 		root = buildTree(expression.trim()); 
 	}
 	
@@ -75,24 +76,76 @@ public class BinaryTreeOP {
 	private BinaryNode buildTree(String expression) {
 		expression = expression.trim();
 	
+		// verifica se o nó é um número
 		if (isNumber(expression)) {
-			return new BinaryNode(expression);
+			return new OperatingNode(Float.parseFloat(expression));  // cria um nó com valor numérico
 		}
 	
+		// verifica se a expressão está entre parênteses
 		if (expression.startsWith("(") && expression.endsWith(")")) {
-			return buildTree(expression.substring(1, expression.length() - 1));
+			int closingParenthesisIndex = findClosingParenthesisIndex(expression);
+			if (closingParenthesisIndex == expression.length() - 1) {
+				return buildTree(expression.substring(1, closingParenthesisIndex).trim());
+			}
 		}
 	
+		// encontra o operador principal
 		int operatorIndex = findMainOperator(expression);
 	
-		BinaryNode root = new BinaryNode(Character.toString(expression.charAt(operatorIndex)));
+		// cria o nó raiz com base no operador
+		BinaryNode root = binaryNodeHandler(Character.toString(expression.charAt(operatorIndex)));
 	
+		// cria os nós filhos recursivamente
 		root.setLeftNode(buildTree(expression.substring(0, operatorIndex).trim()));
 		root.setRightNode(buildTree(expression.substring(operatorIndex + 1).trim()));
 	
 		return root;
 	}
 
+	// encontra o índice do parêntese de fechamento correspondente
+	private int findClosingParenthesisIndex(String expr) {
+		int parenthesesDepth = 0;
+
+		for (int i = 0; i < expr.length(); i++) {
+			char c = expr.charAt(i);
+
+			if (c == '(') {
+				parenthesesDepth++;
+			} else if (c == ')') {
+				parenthesesDepth--;
+				if (parenthesesDepth == 0) {
+					return i;
+				}
+				if (parenthesesDepth < 0) {
+					throw new IllegalArgumentException("Parênteses desbalanceados.");
+				}
+			}
+		}
+		throw new IllegalArgumentException("Parênteses desbalanceados.");
+	}
+			
+	// cria um nó com base no operador ou número
+	private BinaryNode binaryNodeHandler(String expression) {
+		if(isNumber(expression)) {
+			return new OperatingNode(Float.parseFloat(expression));  // cria nó de número
+		}
+		// cria o nó do operador correspondente
+		switch (expression) {
+			case "+":
+				return new OperatorNode('+');
+			case "-":
+				return new OperatorNode('-');
+			case "*":
+				return new OperatorNode('*');
+			case "/":
+				return new OperatorNode('/');
+			default:
+				return new BinaryNode(expression);  // retorna um nó genérico
+		}
+		
+	}
+
+	// encontra o índice do operador principal com base na precedência
 	private int findMainOperator(String expr) {
 		int minPrecedence = Integer.MAX_VALUE;
 		int operatorIndex = -1;
@@ -161,6 +214,7 @@ public class BinaryTreeOP {
 		return 1 + Math.max(leftDegree, rightDegree);
 	}
 
+	// método de percurso em ordem (LNR)
 	private void inOrderTraversal(BinaryNode root) {
 		if (root != null) {
 			inOrderTraversal(root.getLeftNode());
@@ -169,6 +223,7 @@ public class BinaryTreeOP {
 		}
 	}
 
+	// método de percurso em pré-ordem (NLR)
 	private void preOrderTraversal(BinaryNode root) {
 		if (root != null) {
 			System.out.print(root.getValue() + "  ");
@@ -177,6 +232,7 @@ public class BinaryTreeOP {
 		}
 	}
 	
+	// método de percurso em pós-ordem (LRN)
 	private void postOrderTraversal(BinaryNode root) {
 		if (root != null) {
 			postOrderTraversal(root.getLeftNode());

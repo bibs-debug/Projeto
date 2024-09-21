@@ -7,11 +7,16 @@ package src;
 public class Main {
     public static void main(String[] args) {
         
-        String expression = "3 * 5 + 8 * (2 / 3 + 7)";
+        String expression = "(3 * 5 + 8) * (20 / 3 + 7) ";
 
         BinaryTreeOP tree = new BinaryTreeOP();
 
         tree.insertExpression(expression);
+
+        
+        System.out.println(tree.getRoot().getClass().getName());
+
+        System.out.println(tree.calculateResult());
 
         tree.printTree();
 
