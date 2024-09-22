@@ -32,6 +32,72 @@ public class ConvertInfixToPosfix {
         }
         return expressaoPosfixa;
     }
+        
+
+    public static boolean validarExpressaoPosfixa(String expressaoPosfixa) {
+        VeryBasicTokenizer tokenizer = new VeryBasicTokenizer(expressaoPosfixa);
+        String[] tokens = tokenizer.tokenize().split(" "); // Tokeniza a expressão
+        Stack<Double> pilha = new Stack<>();
+        boolean expressaoValida = true; // Flag para a validade da expressão
+
+        for (String token : tokens) {
+            // Se for um número, empilha
+            if (token.matches("\\d+(\\.\\d+)?")) { // Regex para número inteiro ou decimal
+                pilha.push(Double.parseDouble(token));
+            } 
+            // Se for um operador, realiza a operação
+            else if (isOperador(token.charAt(0))) {
+                if (pilha.size() < 1) {
+                    System.out.println("Erro: Operador '" + token + "' com operandos insuficientes.");
+                    expressaoValida = false;
+                    break;
+                }
+                double b = pilha.pop();
+                double a = pilha.pop();
+                switch (token.charAt(0)) {
+                    case '+':
+                        pilha.push(a + b);
+                        break;
+                    case '-':
+                        pilha.push(a - b);
+                        break;
+                    case '*':
+                        pilha.push(a * b);
+                        break;
+                    case '/':
+                        if (b == 0) {
+                            System.out.println("Erro: Divisão por zero.");
+                            expressaoValida = false;
+                            break;
+                        }
+                        pilha.push(a / b);
+                        break;
+                    default:
+                        System.out.println("Erro: Operador desconhecido '" + token + "'.");
+                        expressaoValida = false;
+                        break;
+                }
+            } 
+            // Token inválido
+            else {
+                System.out.println("Erro: Token inválido '" + token + "'.");
+                expressaoValida = false;
+                break;
+            }
+        }
+
+        // Verifica se a pilha contém exatamente um elemento (resultado final)
+        if (expressaoValida && pilha.size() != 1) {
+            System.out.println("Erro: Número incorreto de operandos.");
+            expressaoValida = false;
+        }
+
+        return expressaoValida;
+    }
+
+    public static boolean isOperador(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/';
+    }
 
     private static int prioridade(char operador) {
         switch (operador) {

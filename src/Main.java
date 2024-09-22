@@ -34,20 +34,10 @@ public class Main {
         // } while ();
 
          String expressao = "2*3/(2-1)+5*(4-1)";
-                System.out.println("Posfixa: " + ConvertInfixToPosfix.converterParaPosfixa(expressao));
-
-        // String expression = "(3 * 5 + 8) * (20 / 3 + 7) ";
-
-        // BinaryTreeOP tree = new BinaryTreeOP();
-
-        // tree.insertExpression(expression);
-
-        
-        //System.out.println(tree.getRoot().getClass().getName());
-
-        // System.out.println(tree.calculateResult());
-
-        // tree.printTree();
-
+         String poxfix = ConvertInfixToPosfix.converterParaPosfixa(expressao);
+        System.out.println("Posfixa: " + ConvertInfixToPosfix.converterParaPosfixa(expressao));
+        // Boolean isValid = ConvertInfixToPosfix.validarExpressaoPosfixa(poxfix);
+        // System.out.println(isValid);
+        VeryBasicTokenizer.
     }
 }
