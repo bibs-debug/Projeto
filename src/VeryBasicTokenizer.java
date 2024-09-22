@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VeryBasicTokenizer {
-
-    // operadores aceitos pelo tokenizer
     private static final String OPERATORS = "+-*/()";
 
     private char[] input;  // string de entrada convertida para array de char 
     private int index;     // índice atual do char que está sendo processado
 
     public VeryBasicTokenizer(String str) {
-        input = str.toCharArray();  // converte a string em um array de caracteres
-        index = 0;  // inicializa o índice com 0
+        input = str.toCharArray(); 
+        index = 0; 
     }
 
     // método principal que realiza a quebra e validação da string de entrada
@@ -50,7 +48,6 @@ public class VeryBasicTokenizer {
             } else if (currChar == '\0') {
                 isTokenizing = false;
 
-            // caso contrário, é um token não reconhecido
             } else {
                 System.out.println("Token não reconhecido: " + currChar);
                 isTokenizing = false;
