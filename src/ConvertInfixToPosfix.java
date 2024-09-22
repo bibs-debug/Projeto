@@ -13,7 +13,10 @@ public class ConvertInfixToPosfix {
 
             if (Character.isDigit(caractere)) {
                 expressaoPosfixa += caractere;
-            } else if (caractere == '(') {
+            } else if (Character.isWhitespace(caractere)){
+                continue;
+            }
+             else if (caractere == '(') {
                 pilha.push(caractere);
             } else if (caractere == ')') {
                 while (!pilha.isEmpty() && (char)pilha.peek() != '(') {
@@ -35,65 +38,47 @@ public class ConvertInfixToPosfix {
         
 
     public static boolean validarExpressaoPosfixa(String expressaoPosfixa) {
-        VeryBasicTokenizer tokenizer = new VeryBasicTokenizer(expressaoPosfixa);
-        String[] tokens = tokenizer.tokenize().split(" "); // Tokeniza a expressão
-        Stack<Double> pilha = new Stack<>();
-        boolean expressaoValida = true; // Flag para a validade da expressão
+    expressaoPosfixa = expressaoPosfixa.replaceAll("\\s+", ""); // Remove espaços em branco
+    
+    Stack<Character> pilha = new Stack<>(); // Usando pilha para operandos
+    
+    for (int i = 0; i < expressaoPosfixa.length(); i++) {
+        char caractere = expressaoPosfixa.charAt(i);
 
-        for (String token : tokens) {
-            // Se for um número, empilha
-            if (token.matches("\\d+(\\.\\d+)?")) { // Regex para número inteiro ou decimal
-                pilha.push(Double.parseDouble(token));
-            } 
-            // Se for um operador, realiza a operação
-            else if (isOperador(token.charAt(0))) {
-                if (pilha.size() < 1) {
-                    System.out.println("Erro: Operador '" + token + "' com operandos insuficientes.");
-                    expressaoValida = false;
-                    break;
-                }
-                double b = pilha.pop();
-                double a = pilha.pop();
-                switch (token.charAt(0)) {
-                    case '+':
-                        pilha.push(a + b);
-                        break;
-                    case '-':
-                        pilha.push(a - b);
-                        break;
-                    case '*':
-                        pilha.push(a * b);
-                        break;
-                    case '/':
-                        if (b == 0) {
-                            System.out.println("Erro: Divisão por zero.");
-                            expressaoValida = false;
-                            break;
-                        }
-                        pilha.push(a / b);
-                        break;
-                    default:
-                        System.out.println("Erro: Operador desconhecido '" + token + "'.");
-                        expressaoValida = false;
-                        break;
-                }
-            } 
-            // Token inválido
-            else {
-                System.out.println("Erro: Token inválido '" + token + "'.");
-                expressaoValida = false;
-                break;
+        // Se for letra ou número, considera como operando e empilha
+        if (Character.isLetterOrDigit(caractere)) {
+            pilha.push(caractere);
+        }
+        // Se for operador, desempilha dois operandos para realizar a operação
+        else if (isOperador(caractere)) {
+            if (pilha.size() < 2) {
+                System.out.println("Erro: Operador '" + caractere + "' com operandos insuficientes.");
+                return false;
             }
-        }
+            // Realiza a operação desempilhando dois operandos
+            pilha.pop(); // Segundo operando
+            pilha.pop(); // Primeiro operando
 
-        // Verifica se a pilha contém exatamente um elemento (resultado final)
-        if (expressaoValida && pilha.size() != 1) {
-            System.out.println("Erro: Número incorreto de operandos.");
-            expressaoValida = false;
+            // Após realizar a operação, adiciona o resultado fictício de volta à pilha
+            pilha.push('R'); // 'R' representa um resultado fictício
+        } 
+        // Se encontrar um caractere inválido
+        else {
+            System.out.println("Erro: Caractere desconhecido '" + caractere + "'.");
+            return false;
         }
-
-        return expressaoValida;
     }
+
+    // Se ao final sobrou exatamente um elemento na pilha, a expressão é válida
+    if (pilha.size() != 1) {
+        System.out.println("Erro: Número incorreto de operandos.");
+        return false;
+    }
+
+    return true;
+}
+
+    
 
     public static boolean isOperador(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/';

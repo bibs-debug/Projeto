@@ -33,11 +33,10 @@ public class Main {
         
         // } while ();
 
-         String expressao = "2*3/(2-1)+5*(4-1)";
-         String poxfix = ConvertInfixToPosfix.converterParaPosfixa(expressao);
+        String expressao = "x * y";
+        String poxfix = ConvertInfixToPosfix.converterParaPosfixa(expressao);
         System.out.println("Posfixa: " + ConvertInfixToPosfix.converterParaPosfixa(expressao));
-        // Boolean isValid = ConvertInfixToPosfix.validarExpressaoPosfixa(poxfix);
-        // System.out.println(isValid);
-        VeryBasicTokenizer.
+        Boolean isValid = ConvertInfixToPosfix.validarExpressaoPosfixa(poxfix);
+        System.out.println(isValid);
     }
 }
