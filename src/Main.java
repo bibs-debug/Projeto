@@ -6,12 +6,12 @@ package src;
 import java.util.Scanner;
 
 // TODO: 
-// [ ] make floats with . and , work
-// [ ] make it stop and clear when it finds an invalid character
-// [ ] make it handle exceptions and appropriate show a messages
-// [ ] edge case: when the expression is empty
-// [ ] edge case: when the expression is only spaces
-// [ ] edge case: when the expression is only a number
+// [X] make floats with . 
+// [X] make it stop and clear when it finds an invalid character
+// [X] make it handle exceptions and appropriate show a messages
+// [X] edge case: when the expression is empty
+// [X] edge case: when the expression is only spaces
+// [X] edge case: when the expression is only a number
 
 
 public class Main {
@@ -29,10 +29,17 @@ public class Main {
              + "2. Criação da árvore binária de expressão aritmética.\r\n" 
              + "3. Exibição da árvore binária de expressão aritmética.\r\n"
              + "4. Cálculo da expressão (realizando o percurso da árvore).\r\n"
-             + "5. Encerramento do programa.");
+             + "5. Encerramento do programa.\r\n"
+             + "6. Testes unitários.\r\n");
 			System.out.print("Escolha sua opção: ");
 
-			menu = scanner.nextInt();
+            try {
+                menu = scanner.nextInt();
+            } catch (Exception e) {
+                System.err.println("Opção inválida. Tente novamente");
+                scanner.nextLine();
+                continue;
+            }
 			
 			switch(menu) {
 				case 1: 
@@ -40,33 +47,48 @@ public class Main {
                     scanner.nextLine();
                     expression = scanner.nextLine().trim();
                     if(!isValidInput(expression)){
+                        expression = "";
                         break;
                     }
                     System.out.println("Expressão carregada com sucesso");
                     break;  
                 case 2:
-                    System.out.println("Criando árvore binária de expressão aritmética");
                     if(!isValidInput(expression)){
                         break;
                     }
+                    try {
+                        tree.createTree(expression);
+                    } catch (Exception error) {
+                        System.err.println("Erro ao criar árvore: " + error.getMessage());
+                    }
+                    
+                    System.out.println("Criando árvore binária de expressão aritmética");
                     System.out.println("Árvore criada com sucesso");
-                    tree.createTree(expression);
                     break;              
                 case 3:
-                    System.out.println("Exibindo árvore binária de expressão aritmética:");
                     if(tree.isEmpty()) {
                         System.out.println("Árvore vazia");
                         break;
                     }
+                    System.out.println("Exibindo árvore binária de expressão aritmética:");
                     tree.printTree();
                     break;                    
                 case 4:
+                    if(tree.isEmpty()) {
+                        System.out.println("Árvore vazia");
+                        break;
+                    }
                     System.out.println("Calculando expressão");
                     System.out.println("O resultado é " + tree.calculateResult());
                     break;
                 case 5:
                     System.out.println("\n\nPrograma encerrado");
 					break;
+                case 6:
+                   System.out.println("\n\nTestes unitários\n");
+                    shouldPassTest();
+                    shouldFailTest();
+                    break;
                 default: 
                     System.out.println("\n\nOpção inválida. Tente novamente\n");
 					break;
@@ -77,21 +99,84 @@ public class Main {
 
     private static boolean isValidInput(String expression) {
         expression = expression.trim();
+        
         if(expression.isEmpty() || expression.isBlank() || expression == null) {
             System.err.println("Expressão vazia");
             return false;
         }
 
         try {
-            if(new VeryBasicTokenizer(expression).tokenize().isEmpty()) {
+          if(new BinaryTreeOP().validateExpression(expression)) {
+              throw new IllegalArgumentException("Expressão inválida");
+          }
+        } catch (Exception error) {
+           if(error.getMessage().contains("Expressão vazia")) {
+                System.err.println("Expressão vazia");
+            } else if(error.getMessage().contains("Expressão contém apenas espaços em branco")) {
+                System.err.println("Expressão contém apenas espaços em branco");
+            } else if(error.getMessage().contains("Expressão inválida") ||error.getMessage().contains("out of bound")) {
                 System.err.println("Expressão inválida");
-                return false;
+            } else {
+                System.err.println("Erro ao validar expressão: " + error.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Expressão inválida: " + e.getMessage());
-            return false;
         }
        
         return true;
+    }
+
+    private static void shouldPassTest() {
+        System.out.println("\nTestes que devem passar\n");
+        BinaryTreeOP tree = new BinaryTreeOP();
+
+        String[] testExpressions = {
+            "1+2*3",
+            "(45+20) * 2 - 15",
+            "0.5*3/0.25",
+            "(7 + 3) / (6 - 4) * 9",
+            "1.5 +(2 - (3 +4))*5.1"
+        };
+        String[] testResults = {
+            "7.0",
+            "115.0",
+            "6.0",
+            "45.0",
+            "-24"
+        };
+
+        for (int i = 0; i < testExpressions.length; i++) {
+            try {
+                tree.createTree(testExpressions[i]);
+                float result = tree.calculateResult();
+                if (result == Float.parseFloat(testResults[i])) {
+                    System.out.println("Teste " + (i + 1) + " passou");
+                } else {
+                    System.out.println("Teste " + (i + 1) + " falhou");
+                }
+            } catch (Exception e) {
+                System.out.println("Teste " + (i + 1) + " falhou");
+            }
+        }
+    }
+
+    private static void shouldFailTest() {
+        System.out.println("\nTestes que devem falhar\n");
+        BinaryTreeOP tree = new BinaryTreeOP();
+
+        String[] testExpressions = {
+            "x * y",
+            "1+2*",
+            "((10-2)*3",
+            "5 % 2",
+            "1 + 2 = 3"
+        };
+
+        for (int i = 0; i < testExpressions.length; i++) {
+            try {
+                tree.createTree(testExpressions[i]);
+                System.out.println("Teste " + (i + 1) + " falhou");
+            } catch (Exception e) {
+                System.out.println("Teste " + (i + 1) + " passou");
+            }
+        }
     }
 }

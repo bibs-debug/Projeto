@@ -47,7 +47,29 @@ public class BinaryTreeOP {
 		expression = new VeryBasicTokenizer(expression).tokenize();
 
 		// constrói a árvore com base na expressão tokenizada
-		root = buildTree(expression.trim()); 
+		setRoot(buildTree(expression.trim())); 
+	}
+
+	public boolean validateExpression(String expression) {
+		try {
+			if (expression.isEmpty()) {
+				throw new IllegalArgumentException("Expressão vazia.");
+			}
+	
+			if (expression.trim().isEmpty()) {
+				throw new IllegalArgumentException("Expressão contém apenas espaços em branco.");
+			}
+	
+			if (new VeryBasicTokenizer(expression).tokenize().isEmpty()) {
+				throw new IllegalArgumentException("Expressão inválida.");
+			}
+	
+			buildTree(expression.trim());
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+
+		return false;
 	}
 	
 	public void printTree() {

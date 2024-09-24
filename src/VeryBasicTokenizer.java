@@ -38,14 +38,17 @@ public class VeryBasicTokenizer {
                 currChar = getNextChar();
 
             // se o caractere atual for um dígito, cria um token de número
-            if (Character.isDigit(currChar)) {
-                sb.setLength(0);  // limpa o StringBuilder para novo token
-                while (Character.isDigit(currChar)) {  // continua até o final do número
-                    sb.append(currChar);
-                    currChar = getNextChar();
+           if (Character.isDigit(currChar) || (currChar == '.' && Character.isDigit(getNextChar()))) {
+            sb.setLength(0);  
+            boolean decimalFound = false;  // flag to track if a decimal point has been found
+            while (Character.isDigit(currChar) || (currChar == '.' && !decimalFound)) {
+                if (currChar == '.') {
+                    decimalFound = true;  // set the flag if a decimal point is found
                 }
-                tokens.add(sb.toString());  // adiciona o número como token
-
+                sb.append(currChar);
+                currChar = getNextChar();
+            }
+            tokens.add(sb.toString());  
             // se for um operador, adiciona diretamente como token
             } else if (OPERATORS.contains(String.valueOf(currChar))) {
                 tokens.add(String.valueOf(currChar));
@@ -57,8 +60,7 @@ public class VeryBasicTokenizer {
 
             // caso contrário, é um token não reconhecido
             } else {
-                System.out.println("Token não reconhecido: " + currChar);
-                isTokenizing = false;
+                throw new IllegalArgumentException("Token não reconhecido: " + currChar);
             }
         }
 
