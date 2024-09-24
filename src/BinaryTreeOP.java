@@ -39,24 +39,9 @@ public class BinaryTreeOP {
 	public Float calculateResult() {
 		return root.visit();
 	}
-	
-	// percorre a árvore em ordem (LNR --> L = Left, N = Node, R = Right)
-	public void inOrderTraversal() {
-		inOrderTraversal(root);
-	}
-	
-	// percorre a árvore em pré-ordem (NLR)
-	public void preOrderTraversal() {
-		preOrderTraversal(root);
-	}
-
-	// percorre a árvore em pós-ordem (LRN)
-	public void postOrderTraversal() {
-		postOrderTraversal(root);
-	}
 
 	// insere uma expressão na árvore
-	public void insertExpression(String expression) {
+	public void createTree(String expression) {
 
 	 	// tokeniza a expressão
 		expression = new VeryBasicTokenizer(expression).tokenize();
@@ -212,32 +197,5 @@ public class BinaryTreeOP {
 		int rightDegree = getDegree(node.getRightNode());
 
 		return 1 + Math.max(leftDegree, rightDegree);
-	}
-
-	// método de percurso em ordem (LNR)
-	private void inOrderTraversal(BinaryNode root) {
-		if (root != null) {
-			inOrderTraversal(root.getLeftNode());
-			System.out.print(root.getValue() + "  ");
-			inOrderTraversal(root.getRightNode());
-		}
-	}
-
-	// método de percurso em pré-ordem (NLR)
-	private void preOrderTraversal(BinaryNode root) {
-		if (root != null) {
-			System.out.print(root.getValue() + "  ");
-			preOrderTraversal(root.getLeftNode());
-			preOrderTraversal(root.getRightNode());
-		}
-	}
-	
-	// método de percurso em pós-ordem (LRN)
-	private void postOrderTraversal(BinaryNode root) {
-		if (root != null) {
-			postOrderTraversal(root.getLeftNode());
-			postOrderTraversal(root.getRightNode());
-			System.out.print(root.getValue() + "  ");
-		}
 	}
 }
