@@ -174,7 +174,8 @@ public class Main {
             try {
                 tree.createTree(testExpressions[i]);
                 System.out.println("Teste " + (i + 1) + " falhou");
-            } catch (Exception e) {
+                //captura a exception para confirmar que deu errado
+            } catch (Exception error) {
                 System.out.println("Teste " + (i + 1) + " passou");
             }
         }

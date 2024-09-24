@@ -81,7 +81,7 @@ public class BinaryTreeOP {
 	}
 
 	private BinaryNode buildTree(String expression) {
-		expression = expression.trim();
+		expression = expression.trim(); //trim() tira os espaços das bordas
 	
 		// verifica se o nó é um número
 		if (isNumber(expression)) {
@@ -96,16 +96,17 @@ public class BinaryTreeOP {
 			}
 		}
 	
-		// encontra o operador principal
+		// encontra o operador de maior prioridade e retorna o indx
 		int operatorIndex = findMainOperator(expression);
 	
-		// cria o nó raiz com base no operador
+		// cria a root da sub-árvore com base no operador, converte p/ string e passa o operador princpal com base na posição dele
 		BinaryNode root = binaryNodeHandler(Character.toString(expression.charAt(operatorIndex)));
 	
 		// cria os nós filhos recursivamente
-		root.setLeftNode(buildTree(expression.substring(0, operatorIndex).trim()));
+		root.setLeftNode(buildTree(expression.substring(0, operatorIndex).trim())); 
+		//pega a substring começando do char 0 até o index do principal operador
 		root.setRightNode(buildTree(expression.substring(operatorIndex + 1).trim()));
-	
+		//pega a substring começando do index do principal operador até o final 
 		return root;
 	}
 
