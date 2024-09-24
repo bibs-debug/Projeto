@@ -6,6 +6,7 @@ package src;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class VeryBasicTokenizer {
 
@@ -25,6 +26,10 @@ public class VeryBasicTokenizer {
         List<String> tokens = new ArrayList<>();  // lista para armazenar os tokens
         StringBuilder sb = new StringBuilder();   // usado para construir tokens de múltiplos dígitos, concatenação de operadores, etc
         char currChar = getNextChar();            // obtém o primeiro caractere da entrada
+
+        if(!verifyParentheses(new String(input))){
+            throw new IllegalArgumentException(" parênteses desbalanceados");
+        }
 
         boolean isTokenizing = true;
         while (isTokenizing) {
@@ -64,6 +69,24 @@ public class VeryBasicTokenizer {
         }
 
         return output.trim();  // retorna a string DE tokens
+    }
+
+    private boolean verifyParentheses(String expression) {
+       Stack<Character> stack = new Stack<>();
+
+         for (int i = 0; i < expression.length(); i++) {
+              char c = expression.charAt(i);
+              if (c == '(') {
+                stack.push(c);
+              } else if (c == ')') {
+                if (stack.isEmpty()) {
+                     return false;
+                }
+                stack.pop();
+              }
+         }
+
+        return stack.isEmpty();
     }
 
     // obtem o próximo caractere da string de entrada
