@@ -80,6 +80,54 @@ public class BinaryTreeOP {
 		}
 	}
 
+	public void preOrder() {
+		if (isEmpty()) {
+			System.out.println("Árvore vazia.");
+		} else {
+			preOrder(root);
+		}
+	}
+
+	public void inOrder() {
+		if (isEmpty()) {
+			System.out.println("Árvore vazia.");
+		} else {
+			inOrder(root);
+		}
+	}
+
+	public void postOrder() {
+		if (isEmpty()) {
+			System.out.println("Árvore vazia.");
+		} else {
+			postOrder(root);
+		}
+	}
+
+	private void preOrder(BinaryNode node) {
+		if (node != null) {
+			System.out.print(node.getValue() + " ");
+			preOrder(node.getLeftNode());
+			preOrder(node.getRightNode());
+		}
+	}
+
+	private void inOrder(BinaryNode node) {
+		if (node != null) {
+			inOrder(node.getLeftNode());
+			System.out.print(node.getValue() + " ");
+			inOrder(node.getRightNode());
+		}
+	}
+
+	private void postOrder(BinaryNode node) {
+		if (node != null) {
+			postOrder(node.getLeftNode());
+			postOrder(node.getRightNode());
+			System.out.print(node.getValue() + " ");
+		}
+	}
+
 	private BinaryNode buildTree(String expression) {
 		expression = expression.trim(); //trim() tira os espaços das bordas
 	

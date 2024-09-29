@@ -72,6 +72,15 @@ public class Main {
                     }
                     System.out.println("Exibindo árvore binária de expressão aritmética:");
                     tree.printTree();
+
+                    System.out.println("\n\nPercurso pré-ordem:");
+                    tree.preOrder();
+
+                    System.out.println("\n\nPercurso em ordem:");
+                    tree.inOrder();
+
+                    System.out.println("\n\nPercurso pós-ordem:");
+                    tree.postOrder();
                     break;                    
                 case 4:
                     if(tree.isEmpty()) {
